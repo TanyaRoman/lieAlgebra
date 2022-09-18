@@ -7,7 +7,6 @@ def read_file(file):
         for i in line.split(" "):
             arr2.append(i.rstrip())
         arr.append(arr2)
-    print(arr)
     f.close()
     return arr
 
@@ -29,11 +28,12 @@ def comparison_of(arr):
                 w.append(0)
         aw.append(w)
         new_arr.append(ay)
-    print(new_arr)
     return new_arr, aw
 
 
-# вспомогательная функция дробящая e3-4e2 -> [[1, e3], [-4, e2]]
+# вспомогательная функция дробящая e3-4e2 -> [[1, e3], [-4, e2]] - переменные ar, a
+#                                  e3-4e2 -> [[1, 2], [-4, 1]] - переменные aw, w -
+#                                  именно это используется в дальнейших рассчетах (сразу используются индексы)
 def rrr(j):
     map = {
         'e1': 0,
@@ -113,6 +113,7 @@ def rrr(j):
 
 
 # проверка на удовлетворение тождеству Якобы
+# [[x,y],z] + [[y,z],x] + [[z,x],y] = 0
 def check_yakobi(arr):
     ch = []
     for i in range(7):
@@ -131,15 +132,14 @@ def check_yakobi(arr):
                 print(o2)
 
 
+# вспомогательная функция для Якоби
+# считает для двух значений
 def check(arr, i, j):
     a = []
     if type(i) != int:
         l = len(i)
         k = 0
-        # print(i)
         while k < l:
-            # print(i, i[k], i[k][1])
-            # print(l, k, i[k][0], arr[i[k][1]][j])
             if arr[i[k][1]][j] != 0:
                 ll = len(arr[i[k][1]][j])
                 kk = 0
@@ -154,21 +154,12 @@ def check(arr, i, j):
                 a.append(-1)
                 # return -1
             k += 1
-    # if i != -1:
-    #     if arr[i][j] != 0:
-    #         # a.append(arr[i][j])
-    #         return arr[i][j]
-    #     else:
-    #         # a.append(0)
-    #         return -1
-    # else:
-    #     return -1
     elif i != -1:
         if arr[i][j] != 0:
-            # a.append(arr[i][j])
             return arr[i][j]
         else:
-            # a.append(0)
+            # a.append(-1)
+            # return a
             return -1
     else:
         return -1
@@ -180,11 +171,6 @@ def check(arr, i, j):
 
 
 if __name__ == '__main__':
-    file1 = 'data/ex1.txt'
-    data_file = read_file(file1)
-    # print(rrr('-e4+5e6'))
-    arr, aw = comparison_of(data_file)
-    print(aw)
     comp_map = {
         'e1': 0,
         'e2': 1,
@@ -194,14 +180,15 @@ if __name__ == '__main__':
         'e6': 5,
         'e7': 6
     }
-    check_yakobi(aw)
-    # for i in range(7):
-    #     for j in range (i+1, 7):
-    #         print(check(aw, i, j))
-    # print(check(aw, i, j))
-    # print(type([[2, 'e3']]) != int)
-    # print(check(aw, 1, 2))
-    # m = check(aw, 2, 6)
-    # print(m)
-    # print(check(aw, m, 5))
-    # print(check(aw, [[1, 2], [-1, 3]], 1))
+    file1 = 'data/ex1.txt'
+    data_file1 = read_file(file1)
+    arr1, aw1 = comparison_of(data_file1)
+    print('Проверка алгубры 1 на тождество Якоби')
+    check_yakobi(aw1)
+
+    print("new")
+    file2 = 'data/ex2.txt'
+    data_file2 = read_file(file2)
+    print('Проверка алгубры 2 на тождество Якоби')
+    arr2, aw2 = comparison_of(data_file2)
+    check_yakobi(aw2)
